@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const caseStudies = [
   {
     id: "1",
     title: "E-Commerce CRO Case Study",
-    description: "Optimized checkout flow to increase conversions by 30%.",
-    beforeImg: "/before-checkout.png",
-    afterImg: "/after-checkout.png",
+    description: "Optimized checkout flow to increase conversion rates by 30%.",
+    beforeImg: "/before-checkout.png", alt="Before Optimization" width={500} height={300} />
+    afterImg: "/after-checkout.png",   alt="After Optimization" width={500} height={300} />
     conversionBefore: "1.5%",
     conversionAfter: "3.2%",
     abTest: {
@@ -16,13 +19,11 @@ const caseStudies = [
     },
     funnelBefore: "Users → Add to Cart → Checkout → Purchase (Drop-off 50%)",
     funnelAfter: "Users → Add to Cart → Checkout → Purchase (Drop-off 30%)",
-    content: "<p>We redesigned the checkout experience, reducing friction and improving conversion rates significantly.</p>",
+    content: "<p>This case study details the changes made to the checkout flow, resulting in a significant improvement in conversion rates.</p>"
   },
 ];
 
-import Image from "next/image";
-
-export default function CaseStudy({ caseStudy }) {
+export default function CaseStudyPage({ caseStudy }) {
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold">{caseStudy.title}</h1>
@@ -30,8 +31,8 @@ export default function CaseStudy({ caseStudy }) {
 
       <h2 className="text-2xl font-semibold mt-4">Before & After</h2>
       <div className="grid grid-cols-2 gap-4">
-        <img src={caseStudy.beforeImg} alt="Before Optimization" className="rounded-lg shadow" />
-        <img src={caseStudy.afterImg} alt="After Optimization" className="rounded-lg shadow" />
+        <Image src={caseStudy.beforeImg} alt="Before Optimization" width={500} height={300} className="rounded-lg shadow" />
+        <Image src={caseStudy.afterImg} alt="After Optimization" width={500} height={300} className="rounded-lg shadow" />
       </div>
 
       <h2 className="text-2xl font-semibold mt-4">A/B Test Results</h2>
@@ -58,16 +59,14 @@ export default function CaseStudy({ caseStudy }) {
   );
 }
 
-// 3. Get Dynamic Paths for Static Generation
 export async function getStaticPaths() {
   return {
-    paths: caseStudies.map((study) => ({ params: { id: study.id } })),
+    paths: caseStudies.map((caseStudy) => ({ params: { id: caseStudy.id.toString() } })),
     fallback: false,
   };
 }
 
-// 4. Get Data for Each Case Study
 export async function getStaticProps({ params }) {
-  const caseStudy = caseStudies.find((study) => study.id === params.id);
+  const caseStudy = caseStudies.find((study) => study.id.toString() === params.id);
   return { props: { caseStudy } };
 }
